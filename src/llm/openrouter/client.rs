@@ -49,6 +49,7 @@ impl ToString for OpenrouterModel {
             OpenrouterModel::DeepseekV3 => "deepseek/deepseek-chat-v3".to_string(),
             OpenrouterModel::MistralLarge => "mistralai/mistral-large".to_string(),
             OpenrouterModel::Claude4_5Haiku => "anthropic/claude-haiku-4.5".to_string(),
+            OpenrouterModel::Claude3Haiku => "anthropic/claude-haiku-3".to_string(),
         }
     }
 }
