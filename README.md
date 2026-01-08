@@ -1,384 +1,338 @@
-# 🦜️🔗LangChain Rust
+# LangChain Rust OpenRouter
 
-[![Latest Version]][crates.io]
+A fork of [langchain-rust](https://github.com/Abraxas-365/langchain-rust) with first-class support for [OpenRouter](https://openrouter.ai), providing unified access to multiple AI model providers through a single API.
 
-[Latest Version]: https://img.shields.io/crates/v/langchain-rust.svg
-[crates.io]: https://crates.io/crates/langchain-rust
+## Overview
 
-⚡ Building applications with LLMs through composability, with Rust! ⚡
+This library extends langchain-rust with native OpenRouter integration, allowing you to:
 
-[![Discord](https://dcbadge.vercel.app/api/server/JJFcTFbanu?style=for-the-badge)](https://discord.gg/JJFcTFbanu)
-[![Docs: Tutorial](https://img.shields.io/badge/docs-tutorial-success?style=for-the-badge&logo=appveyor)](https://langchain-rust.sellie.tech/get-started/quickstart)
-
-## 🤔 What is this?
-
-This is the Rust language implementation of [LangChain](https://github.com/langchain-ai/langchain).
-
-## Current Features
-
-- LLMs
-
-  - [x] [OpenAi](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/llm_openai.rs)
-  - [x] [Azure OpenAi](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/llm_azure_open_ai.rs)
-  - [x] [Ollama](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/llm_ollama.rs)
-  - [x] [Anthropic Claude](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/llm_anthropic_claude.rs)
-
-- Embeddings
-
-  - [x] [OpenAi](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/embedding_openai.rs)
-  - [x] [Azure OpenAi](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/embedding_azure_open_ai.rs)
-  - [x] [Ollama](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/embedding_ollama.rs)
-  - [x] [Local FastEmbed](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/embedding_fastembed.rs)
-  - [x] [MistralAI](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/embedding_mistralai.rs)
-
-- VectorStores
-
-  - [x] [OpenSearch](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/vector_store_opensearch.rs)
-  - [x] [Postgres](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/vector_store_postgres.rs)
-  - [x] [Qdrant](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/vector_store_qdrant.rs)
-  - [x] [Sqlite](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/vector_store_sqlite_vss.rs)
-  - [x] [SurrealDB](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/vector_store_surrealdb/src/main.rs)
-
-- Chain
-
-  - [x] [LLM Chain](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/llm_chain.rs)
-  - [x] [Conversational Chain](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/conversational_chain.rs)
-  - [x] [Conversational Retriever Simple](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/conversational_retriever_simple_chain.rs)
-  - [x] [Conversational Retriever With Vector Store](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/conversational_retriever_chain_with_vector_store.rs)
-  - [x] [Sequential Chain](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/sequential_chain.rs)
-  - [x] [Q&A Chain](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/qa_chain.rs)
-  - [x] [SQL Chain](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/sql_chain.rs)
-
-- Agents
-
-  - [x] [Chat Agent with Tools](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/agent.rs)
-  - [x] [Open AI Compatible Tools Agent](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/open_ai_tools_agent.rs)
-
-- Tools
-
-  - [x] Serpapi/Google
-  - [x] DuckDuckGo Search
-  - [x] [Wolfram/Math](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/wolfram_tool.rs)
-  - [x] Command line
-  - [x] [Text2Speech](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/speech2text_openai.rs)
-
-- Semantic Routing
-
-  - [x] [Static Routing](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/semantic_routes.rs)
-  - [x] [Dynamic Routing](https://github.com/Abraxas-365/langchain-rust/blob/main/examples/dynamic_semantic_routes.rs)
-
-- Document Loaders
-
-  - [x] PDF
-
-    ```rust
-    use futures_util::StreamExt;
-
-    async fn main() {
-        let path = "./src/document_loaders/test_data/sample.pdf";
-
-        let loader = PdfExtractLoader::from_path(path).expect("Failed to create PdfExtractLoader");
-        // let loader = LoPdfLoader::from_path(path).expect("Failed to create LoPdfLoader");
-
-        let docs = loader
-            .load()
-            .await
-            .unwrap()
-            .map(|d| d.unwrap())
-            .collect::<Vec<_>>()
-            .await;
-
-    }
-    ```
-
-  - [x] Pandoc
-
-    ```rust
-    use futures_util::StreamExt;
-
-    async fn main() {
-
-        let path = "./src/document_loaders/test_data/sample.docx";
-
-        let loader = PandocLoader::from_path(InputFormat::Docx.to_string(), path)
-            .await
-            .expect("Failed to create PandocLoader");
-
-        let docs = loader
-            .load()
-            .await
-            .unwrap()
-            .map(|d| d.unwrap())
-            .collect::<Vec<_>>()
-            .await;
-    }
-    ```
-
-  - [x] HTML
-
-    ```rust
-    use futures_util::StreamExt;
-    use url::Url;
-
-    async fn main() {
-        let path = "./src/document_loaders/test_data/example.html";
-        let html_loader = HtmlLoader::from_path(path, Url::parse("https://example.com/").unwrap())
-            .expect("Failed to create html loader");
-
-        let documents = html_loader
-            .load()
-            .await
-            .unwrap()
-            .map(|x| x.unwrap())
-            .collect::<Vec<_>>()
-            .await;
-    }
-    ```
-
-  - [x] HTML To Markdown
-
-    ```rust
-    use futures_util::StreamExt;
-    use url::Url;
-
-    async fn main() {
-        let path = "./src/document_loaders/test_data/example.html";
-        let html_to_markdown_loader = HtmlToMarkdownLoader::from_path(path, Url::parse("https://example.com/").unwrap(), HtmlToMarkdownOptions::default().with_skip_tags(vec!["figure".to_string()]))
-            .expect("Failed to create html to markdown loader");
-
-        let documents = html_to_markdown_loader
-            .load()
-            .await
-            .unwrap()
-            .map(|x| x.unwrap())
-            .collect::<Vec<_>>()
-            .await;
-    }
-    ```
-
-  - [x] CSV
-
-    ```rust
-    use futures_util::StreamExt;
-
-    async fn main() {
-        let path = "./src/document_loaders/test_data/test.csv";
-        let columns = vec![
-            "name".to_string(),
-            "age".to_string(),
-            "city".to_string(),
-            "country".to_string(),
-        ];
-        let csv_loader = CsvLoader::from_path(path, columns).expect("Failed to create csv loader");
-
-        let documents = csv_loader
-            .load()
-            .await
-            .unwrap()
-            .map(|x| x.unwrap())
-            .collect::<Vec<_>>()
-            .await;
-    }
-    ```
-
-  - [x] Git commits
-
-    ```rust
-    use futures_util::StreamExt;
-
-    async fn main() {
-        let path = "/path/to/git/repo";
-        let git_commit_loader = GitCommitLoader::from_path(path).expect("Failed to create git commit loader");
-
-        let documents = csv_loader
-            .load()
-            .await
-            .unwrap()
-            .map(|x| x.unwrap())
-            .collect::<Vec<_>>()
-            .await;
-    }
-    ```
-
-  - [x] Source code
-
-    ```rust
-
-    let loader_with_dir =
-    SourceCodeLoader::from_path("./src/document_loaders/test_data".to_string())
-    .with_dir_loader_options(DirLoaderOptions {
-    glob: None,
-    suffixes: Some(vec!["rs".to_string()]),
-    exclude: None,
-    });
-
-    let stream = loader_with_dir.load().await.unwrap();
-    let documents = stream.map(|x| x.unwrap()).collect::<Vec<_>>().await;
-    ```
+- Access 200+ LLM models from OpenAI, Anthropic, Google, Meta, Mistral, and more through a single API
+- Use OpenRouter's unified embeddings API with multiple embedding models
+- Leverage automatic fallback routing between providers
+- Configure provider preferences for cost optimization and data privacy
 
 ## Installation
 
-This library heavily relies on `serde_json` for its operation.
+Add the dependency to your `Cargo.toml`:
 
-### Step 1: Add `serde_json`
-
-First, ensure `serde_json` is added to your Rust project.
-
-```bash
-cargo add serde_json
+```toml
+[dependencies]
+langchain-rust = { git = "https://github.com/coolcmyk/langchain-rust-openrouter" }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
 ```
 
-### Step 2: Add `langchain-rust`
+## Environment Variables
 
-Then, you can add `langchain-rust` to your Rust project.
-
-#### Simple install
+Set your OpenRouter API key:
 
 ```bash
-cargo add langchain-rust
+export OPENROUTER_API_KEY="your-api-key-here"
 ```
 
-#### With Sqlite
+## Usage
 
-##### sqlite-vss
+### LLM Client
 
-Download additional sqlite_vss libraries from <https://github.com/asg017/sqlite-vss>
+The `Openrouter` client provides access to all models available on OpenRouter.
 
-```bash
-cargo add langchain-rust --features sqlite-vss
+#### Basic Usage
+
+```rust
+use langchain_rust::llm::{Openrouter, OpenrouterModel};
+use langchain_rust::language_models::llm::LLM;
+
+#[tokio::main]
+async fn main() {
+    // Initialize with defaults (reads OPENROUTER_API_KEY from environment)
+    let client = Openrouter::default();
+    
+    // Or configure explicitly
+    let client = Openrouter::default()
+        .with_api_key("your-api-key")
+        .with_model(OpenrouterModel::Gpt4oMini.to_string());
+    
+    let response = client.invoke("What is Rust?").await.unwrap();
+    println!("{}", response);
+}
 ```
 
-##### sqlite-vec
+#### Using Different Models
 
-Download additional sqlite_vec libraries from <https://github.com/asg017/sqlite-vec>
+```rust
+use langchain_rust::llm::{Openrouter, OpenrouterModel};
 
-```bash
-cargo add langchain-rust --features sqlite-vec
+// Using predefined model enum
+let client = Openrouter::default()
+    .with_model(OpenrouterModel::Claude35Sonnet.to_string());
+
+// Using custom model string
+let client = Openrouter::default()
+    .with_model("google/gemini-2.0-flash-001");
+
+// Available predefined models:
+// - OpenrouterModel::Gpt4o
+// - OpenrouterModel::Gpt4oMini
+// - OpenrouterModel::Claude35Sonnet
+// - OpenrouterModel::Claude3Opus
+// - OpenrouterModel::Claude3Haiku
+// - OpenrouterModel::Claude4_5Haiku
+// - OpenrouterModel::Gemini2Flash
+// - OpenrouterModel::Llama31405b
+// - OpenrouterModel::DeepseekV3
+// - OpenrouterModel::MistralLarge
 ```
 
+#### Fallback Models
 
-#### With Postgres
+Configure automatic fallback to alternative models if the primary model fails:
 
-```bash
-cargo add langchain-rust --features postgres
+```rust
+use langchain_rust::llm::Openrouter;
+
+let client = Openrouter::default()
+    .with_model("openai/gpt-4o")
+    .with_fallback_models(vec![
+        "anthropic/claude-3.5-sonnet".to_string(),
+        "google/gemini-2.0-flash-001".to_string(),
+    ]);
 ```
 
-#### With SurrialDB
+#### Provider Preferences
 
-```bash
-cargo add langchain-rust --features surrealdb
+Control which providers serve your requests:
+
+```rust
+use langchain_rust::llm::{Openrouter, ProviderPreferences};
+
+let preferences = ProviderPreferences {
+    order: Some(vec!["openai".to_string(), "azure".to_string()]),
+    allow_fallbacks: Some(true),
+    data_collection: Some("deny".to_string()),
+    require_parameters: None,
+};
+
+let client = Openrouter::default()
+    .with_model("openai/gpt-4o")
+    .with_provider_preferences(preferences);
 ```
 
-#### With Qdrant
+#### Streaming Responses
 
-```bash
-cargo add langchain-rust --features qdrant
+```rust
+use langchain_rust::llm::Openrouter;
+use langchain_rust::language_models::llm::LLM;
+use langchain_rust::schemas::{Message, MessageType};
+use futures::StreamExt;
+
+#[tokio::main]
+async fn main() {
+    let client = Openrouter::default();
+    
+    let messages = vec![Message {
+        content: "Write a short poem about Rust".to_string(),
+        message_type: MessageType::HumanMessage,
+        id: None,
+        images: None,
+        tool_calls: None,
+    }];
+    
+    let mut stream = client.stream(&messages).await.unwrap();
+    
+    while let Some(result) = stream.next().await {
+        match result {
+            Ok(data) => print!("{}", data.content),
+            Err(e) => eprintln!("Error: {}", e),
+        }
+    }
+}
 ```
 
-Please remember to replace the feature flags `sqlite`, `postgres` or `surrealdb` based on your
-specific use case.
-
-This will add both `serde_json` and `langchain-rust` as dependencies in your `Cargo.toml`
-file. Now, when you build your project, both dependencies will be fetched and compiled, and will be available for use in your project.
-
-Remember, `serde_json` is a necessary dependencies, and `sqlite`, `postgres` and `surrealdb`
-are optional features that may be added according to project needs.
-
-### Quick Start Conversational Chain
+#### Using with Chains
 
 ```rust
 use langchain_rust::{
     chain::{Chain, LLMChainBuilder},
-    fmt_message, fmt_placeholder, fmt_template,
-    language_models::llm::LLM,
-    llm::openai::{OpenAI, OpenAIModel},
+    llm::Openrouter,
+    fmt_message, fmt_template,
     message_formatter,
     prompt::HumanMessagePromptTemplate,
     prompt_args,
-    schemas::messages::Message,
+    schemas::Message,
     template_fstring,
 };
 
 #[tokio::main]
 async fn main() {
-    //We can then initialize the model:
-    // If you'd prefer not to set an environment variable you can pass the key in directly via the `openai_api_key` named parameter when initiating the OpenAI LLM class:
-    // let open_ai = OpenAI::default()
-    //     .with_config(
-    //         OpenAIConfig::default()
-    //             .with_api_key("<your_key>"),
-    //     ).with_model(OpenAIModel::Gpt4oMini.to_string());
-    let open_ai = OpenAI::default().with_model(OpenAIModel::Gpt4oMini.to_string());
-
-
-    //Once you've installed and initialized the LLM of your choice, we can try using it! Let's ask it what LangSmith is - this is something that wasn't present in the training data so it shouldn't have a very good response.
-    let resp = open_ai.invoke("What is rust").await.unwrap();
-    println!("{}", resp);
-
-    // We can also guide it's response with a prompt template. Prompt templates are used to convert raw user input to a better input to the LLM.
+    let client = Openrouter::default()
+        .with_model("anthropic/claude-3.5-sonnet");
+    
     let prompt = message_formatter![
         fmt_message!(Message::new_system_message(
-            "You are world class technical documentation writer."
+            "You are a helpful assistant."
         )),
         fmt_template!(HumanMessagePromptTemplate::new(template_fstring!(
             "{input}", "input"
         )))
     ];
-
-    //We can now combine these into a simple LLM chain:
-
+    
     let chain = LLMChainBuilder::new()
         .prompt(prompt)
-        .llm(open_ai.clone())
+        .llm(client)
         .build()
         .unwrap();
-
-    //We can now invoke it and ask the same question. It still won't know the answer, but it should respond in a more proper tone for a technical writer!
-
-    match chain
-        .invoke(prompt_args! {
-        "input" => "Quien es el escritor de 20000 millas de viaje submarino",
-           })
+    
+    let result = chain
+        .invoke(prompt_args! { "input" => "What is the capital of France?" })
         .await
-    {
-        Ok(result) => {
-            println!("Result: {:?}", result);
-        }
-        Err(e) => panic!("Error invoking LLMChain: {:?}", e),
-    }
+        .unwrap();
+    
+    println!("{}", result);
+}
+```
 
-    //If you want to prompt to have a list of messages you could use the `fmt_placeholder` macro
+### Embeddings
 
-    let prompt = message_formatter![
-        fmt_message!(Message::new_system_message(
-            "You are world class technical documentation writer."
-        )),
-        fmt_placeholder!("history"),
-        fmt_template!(HumanMessagePromptTemplate::new(template_fstring!(
-            "{input}", "input"
-        ))),
+The `OpenrouterEmbedder` provides access to embedding models through OpenRouter.
+
+#### Basic Usage
+
+```rust
+use langchain_rust::embedding::{Embedder, OpenrouterEmbedder, OpenrouterEmbeddingModel};
+
+#[tokio::main]
+async fn main() {
+    // Initialize with defaults
+    let embedder = OpenrouterEmbedder::default();
+    
+    // Or configure explicitly
+    let embedder = OpenrouterEmbedder::default()
+        .with_api_key("your-api-key")
+        .with_model(OpenrouterEmbeddingModel::TextEmbedding3Small.to_string());
+    
+    // Embed a single query
+    let embedding = embedder.embed_query("Hello world").await.unwrap();
+    println!("Embedding dimensions: {}", embedding.len());
+}
+```
+
+#### Batch Document Embedding
+
+```rust
+use langchain_rust::embedding::{Embedder, OpenrouterEmbedder};
+
+#[tokio::main]
+async fn main() {
+    let embedder = OpenrouterEmbedder::default()
+        .with_model("openai/text-embedding-3-small");
+    
+    let documents = vec![
+        "First document about machine learning".to_string(),
+        "Second document about rust programming".to_string(),
+        "Third document about embeddings".to_string(),
     ];
-
-    let chain = LLMChainBuilder::new()
-        .prompt(prompt)
-        .llm(open_ai)
-        .build()
-        .unwrap();
-    match chain
-        .invoke(prompt_args! {
-        "input" => "Who is the writer of 20,000 Leagues Under the Sea, and what is my name?",
-        "history" => vec![
-                Message::new_human_message("My name is: luis"),
-                Message::new_ai_message("Hi luis"),
-                ],
-
-        })
-        .await
-    {
-        Ok(result) => {
-            println!("Result: {:?}", result);
-        }
-        Err(e) => panic!("Error invoking LLMChain: {:?}", e),
+    
+    let embeddings = embedder.embed_documents(&documents).await.unwrap();
+    
+    for (i, embedding) in embeddings.iter().enumerate() {
+        println!("Document {}: {} dimensions", i, embedding.len());
     }
 }
 ```
+
+#### Available Embedding Models
+
+| Model | Dimensions | Description |
+|-------|------------|-------------|
+| `openai/text-embedding-3-small` | 1536 | Fast and cost-effective |
+| `openai/text-embedding-3-large` | 3072 | Higher quality embeddings |
+| `openai/text-embedding-ada-002` | 1536 | Legacy model |
+| `qwen/qwen3-embedding-0.6b` | Variable | Lightweight option |
+| `qwen/qwen3-embedding-4b` | Variable | Balanced performance |
+
+#### Using with Vector Stores
+
+```rust
+use langchain_rust::embedding::{Embedder, OpenrouterEmbedder};
+use langchain_rust::vectorstore::qdrant::Qdrant;
+
+#[tokio::main]
+async fn main() {
+    let embedder = OpenrouterEmbedder::default()
+        .with_model("openai/text-embedding-3-small");
+    
+    // Use with Qdrant vector store
+    let vector_store = Qdrant::new(
+        "http://localhost:6334",
+        "my_collection",
+        Box::new(embedder),
+    ).await.unwrap();
+    
+    // Add documents, search, etc.
+}
+```
+
+## Configuration Options
+
+### LLM Client Options
+
+| Method | Description |
+|--------|-------------|
+| `with_model()` | Set the model to use |
+| `with_api_key()` | Set the API key |
+| `with_base_url()` | Set custom base URL |
+| `with_json_mode()` | Enable JSON output mode |
+| `with_http_referer()` | Set app identification header |
+| `with_x_title()` | Set app title header |
+| `with_fallback_models()` | Set fallback model list |
+| `with_provider_preferences()` | Configure provider routing |
+| `with_top_k()` | Set top-k sampling |
+| `with_repetition_penalty()` | Set repetition penalty |
+| `with_min_p()` | Set min-p sampling |
+| `with_top_a()` | Set top-a sampling |
+| `with_seed()` | Set random seed |
+
+### Embedder Options
+
+| Method | Description |
+|--------|-------------|
+| `with_model()` | Set the embedding model |
+| `with_api_key()` | Set the API key |
+| `with_base_url()` | Set custom base URL |
+| `with_http_referer()` | Set app identification header |
+| `with_x_title()` | Set app title header |
+
+## Error Handling
+
+The library provides specific error types for OpenRouter API responses:
+
+```rust
+use langchain_rust::llm::OpenrouterError;
+
+// Error variants:
+// - BadRequestError (400)
+// - UnauthorizedError (401)
+// - PaymentRequiredError (402)
+// - RateLimitError (429)
+// - BadGatewayError (502)
+// - ServiceUnavailableError (503)
+// - ProviderOverloadedError (529)
+```
+
+## Additional Features
+
+This fork includes all features from the original langchain-rust:
+
+- Vector Stores: Qdrant, Postgres, SQLite, SurrealDB, OpenSearch
+- Document Loaders: PDF, HTML, CSV, Pandoc, Git commits, Source code
+- Chains: LLM Chain, Conversational Chain, Q&A Chain, SQL Chain
+- Agents: Chat Agent with Tools, OpenAI Tools Agent
+- Semantic Routing: Static and Dynamic routing
+
+## Credits
+
+This project is a fork of [langchain-rust](https://github.com/Abraxas-365/langchain-rust) by Abraxas-365.
+
+## License
+
+MIT License - see the original repository for details.
