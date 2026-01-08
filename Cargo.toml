@@ -1,14 +1,15 @@
 workspace = { members = ["examples/vector_store_surrealdb"] }
 [package]
-name = "langchain-rust"
+name = "langchain-rust-openrouter"
 version = "4.6.0"
 edition = "2021"
 publish = true
-repository = "https://github.com/Abraxas-365/langchain-rust"
+repository = "https://github.com/coolcmyk/langchain-rust-openrouter"
 license = "MIT"
-description = "LangChain for Rust, the easiest way to write LLM-based programs in Rust"
-keywords = ["chain", "chatgpt", "llm", "langchain"]
-documentation = "https://langchain-rust.sellie.tech/get-started/quickstart"
+authors = ["Abraxas-365", "coolcmyk"]
+description = "LangChain for Rust with OpenRouter integration - unified access to 200+ LLM and embedding models"
+keywords = ["chain", "chatgpt", "llm", "langchain", "openrouter"]
+documentation = "https://github.com/coolcmyk/langchain-rust-openrouter"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
