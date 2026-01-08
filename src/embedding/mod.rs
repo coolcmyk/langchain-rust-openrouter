@@ -20,3 +20,7 @@ pub use fastembed::*;
 pub mod mistralai;
 #[cfg(feature = "mistralai")]
 pub use mistralai::*;
+
+pub mod openrouter;
+pub use openrouter::*;
+

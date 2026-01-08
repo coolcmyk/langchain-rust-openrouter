@@ -22,6 +22,11 @@ pub enum OpenrouterModel {
     Claude35Sonnet,
     /// Anthropic Claude 3 Opus
     Claude3Opus,
+    Claude3Haiku,
+
+
+    Claude4_5Haiku,
+
     /// Google Gemini 2.0 Flash
     Gemini2Flash,
     /// Meta Llama 3.1 405B
@@ -43,6 +48,7 @@ impl ToString for OpenrouterModel {
             OpenrouterModel::Llama31405b => "meta-llama/llama-3.1-405b-instruct".to_string(),
             OpenrouterModel::DeepseekV3 => "deepseek/deepseek-chat-v3".to_string(),
             OpenrouterModel::MistralLarge => "mistralai/mistral-large".to_string(),
+            OpenrouterModel::Claude4_5Haiku => "anthropic/claude-haiku-4.5".to_string(),
         }
     }
 }
